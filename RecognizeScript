@@ -1,15 +1,16 @@
 Rem begin
-FindColor 1472,145 ,1771,583 ,"FFFFFF",intX,intY
-If intX > 0 And intY > 0 Then 
-    Dim intPosY
-    intPosY = intY
+FindColor 1472,145 ,1771,583 ,"FFFFFF",intX,intY//設定辨識座標點左上，右下，取色碼
+If intX > 0 And intY > 0 Then //如果取色成立
+    Dim intPosY//宣告intPosY儲存得到的Y值
+    intPosY = intY//intY存入
     Dim ResultDisY
-    ResultDisY = intPosY - 50//參考點Y軸
+    ResultDisY = intPosY - 50//因為參考點的Y軸是50，所以以此當做基準來做相對於參考點的定位
     Dim PCRealDisY
-    PCRealY = ResultDisY 
-    TracePrint PCRealY
+    PCRealY = ResultDisY //留這個的原因是因為如果要換算成座標軸的時候，需要以像素當考量
+    //算法為: 一座標單位，除以裡面有幾個像素=真實座標
+    TracePrint PCRealY//Print出值在Debug視窗內
 /*********/
-            Call Plugin.File.WriteFileEx("E:\Y.txt", PCRealY)
+            Call Plugin.File.WriteFileEx("E:\Y.txt", PCRealY)//寫入真實座標點在Y.txt文件
     Dim intPosX
     intPosX = intX
     Dim ResultDisX
