@@ -1,0 +1,34 @@
+Rem begin
+FindColor 1472,145 ,1771,583 ,"FFFFFF",intX,intY
+If intX > 0 And intY > 0 Then 
+    Dim intPosY
+    intPosY = intY
+    Dim ResultDisY
+    ResultDisY = intPosY - 50//參考點Y軸
+    Dim PCRealDisY
+    PCRealY = ResultDisY 
+    TracePrint PCRealY
+/*********/
+            Call Plugin.File.WriteFileEx("E:\Y.txt", PCRealY)
+    Dim intPosX
+    intPosX = intX
+    Dim ResultDisX
+    ResultDisX = intPosX - 690//參考點X軸
+    Dim PCRealDisX
+    PCRealX = ResultDisX 
+    TracePrint PCRealX
+/***********/
+                Call Plugin.File.WriteFileEx("E:\X.txt", PCRealX)
+End If
+FindColor 2100,140,2112,606 ,"FFFFFF",intX,intY
+If intX > 0 And intY > 0 Then
+    Dim intPosZ
+    intPosZ = intY
+    Dim ResultDisZ
+    ResultDisZ =  603-intPosZ//參考點X軸
+    Dim PCRealDisZ
+    PCRealZ = ResultDisZ 
+    TracePrint PCRealZ
+    Call Plugin.File.WriteFileEx("E:\Z.txt", PCRealZ)
+End If
+Goto begin
