@@ -25,7 +25,7 @@ If intX > 0 And intY > 0 Then
     Dim intPosZ
     intPosZ = intY
     Dim ResultDisZ
-    ResultDisZ =  603-intPosZ//參考點X軸
+    ResultDisZ =  603-intPosZ//參考點Z軸
     Dim PCRealDisZ
     PCRealZ = ResultDisZ 
     TracePrint PCRealZ
