@@ -10,7 +10,7 @@ If intX > 0 And intY > 0 Then //如果取色成立
     //算法為: 一座標單位，除以裡面有幾個像素=真實座標
     TracePrint PCRealY//Print出值在Debug視窗內
 /*********/
-            Call Plugin.File.WriteFileEx("E:\Y.txt", PCRealY)//寫入真實座標點在Y.txt文件
+            Call Plugin.File.WriteFileEx("E:\Y.txt", ResultDisY)//寫入真實座標點在Y.txt文件
     Dim intPosX
     intPosX = intX
     Dim ResultDisX
@@ -19,7 +19,7 @@ If intX > 0 And intY > 0 Then //如果取色成立
     PCRealX = ResultDisX 
     TracePrint PCRealX
 /***********/
-                Call Plugin.File.WriteFileEx("E:\X.txt", PCRealX)
+                Call Plugin.File.WriteFileEx("E:\X.txt", ResultDisX)
 End If
 FindColor 2100,140,2112,606 ,"FFFFFF",intX,intY
 If intX > 0 And intY > 0 Then
@@ -30,6 +30,6 @@ If intX > 0 And intY > 0 Then
     Dim PCRealDisZ
     PCRealZ = ResultDisZ 
     TracePrint PCRealZ
-    Call Plugin.File.WriteFileEx("E:\Z.txt", PCRealZ)
+    Call Plugin.File.WriteFileEx("E:\Z.txt", ResultDisZ)
 End If
 Goto begin
