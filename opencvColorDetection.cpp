@@ -17,29 +17,46 @@ int main(int argc, char** argv)
 	}
 
 	namedWindow("Control", CV_WINDOW_AUTOSIZE); //create a window called "Control"
-	int iLowH = 0;
-	int iHighH = 255;
+	int iLowGreen = 84;
+	int iHighGreen = 101;
 
-	int iLowS = 0;
-	int iHighS = 0;
+	int VLowGreen = 203;
+	int VHighGreen = 255;
 
-	int iLowV = 0;
-	int iHighV = 255;
+	int iLowYellow = 26;
+	int iHighYellow = 36;
+
+	int VLowYellow = 168;
+	int VHighYellow = 255;
+
+	int iLowBlue = 93;
+	int iHighBlue = 103;
+
+	int VLowBlue = 217;
+	int VHighBlue = 255;
 
 	//Create trackbars in "Control" window
-	cvCreateTrackbar("LowH", "Control", &iLowH, 179); //Hue (0 - 179)
-	cvCreateTrackbar("HighH", "Control", &iHighH, 179);
+	cvCreateTrackbar("綠色低色相", "Control", &iLowGreen, 255); //Green (0 - 179)
+	cvCreateTrackbar("綠色高色相", "Control", &iHighGreen, 179);
 
-	cvCreateTrackbar("LowS", "Control", &iLowS, 255); //Saturation (0 - 255)
-	cvCreateTrackbar("HighS", "Control", &iHighS, 255);
+	cvCreateTrackbar("綠色低亮度", "Control", &VLowGreen, 255); //Green (0 - 179)
+	cvCreateTrackbar("綠色高亮度", "Control", &VHighGreen, 179);
 
-	cvCreateTrackbar("LowV", "Control", &iLowV, 255); //Value (0 - 255)
-	cvCreateTrackbar("HighV", "Control", &iHighV, 255);
+	cvCreateTrackbar("黃色低色相", "Control", &iLowYellow, 255); //Yellow (0 - 255)
+	cvCreateTrackbar("黃色高色相", "Control", &iHighYellow, 255);
 
+	cvCreateTrackbar("黃色低亮度", "Control", &VLowYellow, 255); //Yellow (0 - 255)
+	cvCreateTrackbar("黃色高亮度", "Control", &VHighYellow, 255);
+
+	cvCreateTrackbar("藍色低色相", "Control", &iLowBlue, 255); //Blue (0 - 255)
+	cvCreateTrackbar("藍色高色相", "Control", &iHighBlue, 255);
+
+	cvCreateTrackbar("藍色低亮度", "Control", &VLowBlue, 255); //Blue (0 - 255)
+	cvCreateTrackbar("藍色高亮度", "Control", &VHighBlue, 255);
 	while (true)
 	{
 		Mat imgOriginal;
-	
+
 		bool bSuccess = cap.read(imgOriginal); // read a new frame from video
 		if (!bSuccess) //if not success, break loop
 		{
@@ -52,10 +69,14 @@ int main(int argc, char** argv)
 		cvtColor(imgOriginal, imgHSV, COLOR_BGR2HSV); //Convert the captured frame from BGR to HSV
 
 		Mat imgThresholded;
+		Mat YellowimgThresholded;
+		Mat GreenimgThresholded;
 
-		inRange(imgHSV, Scalar(iLowH, iLowS, iLowV), Scalar(iHighH, iHighS, iHighV), imgThresholded); //Threshold the image
+		inRange(imgHSV, Scalar(/*低色相*/iLowBlue,  /*低彩度*/50, /*低亮度*/VLowBlue),   Scalar(/*高色相*/iHighBlue, /*高彩度*/255, VHighBlue), imgThresholded); //Blue
+		inRange(imgHSV, Scalar(/*低色相*/iLowYellow,/*低彩度*/50, /*低亮度*/VLowYellow), Scalar(/*高色相*/iHighYellow, /*高彩度*/255, VHighYellow), YellowimgThresholded); //Yellow
+		inRange(imgHSV, Scalar(/*低色相*/iLowGreen, /*低彩度*/50, /*低亮度*/VLowGreen),  Scalar(/*高色相*/iHighGreen, /*高彩度*/255, VHighGreen), GreenimgThresholded); //Green
 
-																									  //morphological opening (remove small objects from the foreground)
+																																				   /**************************************************************************************************************/
 		erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 		dilate(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 
@@ -63,8 +84,30 @@ int main(int argc, char** argv)
 		dilate(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 		erode(imgThresholded, imgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
 
-		imshow("Thresholded Image", imgThresholded); //show the thresholded image
-		//imshow("Original", imgOriginal); //show the original image
+		/**************************************************************************************************************/
+
+		erode(YellowimgThresholded, YellowimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+		dilate(YellowimgThresholded, YellowimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+
+		//morphological closing (fill small holes in the foreground)
+		dilate(YellowimgThresholded, YellowimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+		erode(YellowimgThresholded, YellowimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+		/*****************************************************************************************************************/
+
+		/**************************************************************************************************************/
+
+		erode(GreenimgThresholded, GreenimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+		dilate(GreenimgThresholded, GreenimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+
+		//morphological closing (fill small holes in the foreground)
+		dilate(GreenimgThresholded, GreenimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+		erode(GreenimgThresholded, GreenimgThresholded, getStructuringElement(MORPH_ELLIPSE, Size(5, 5)));
+		/*****************************************************************************************************************/
+
+		imshow("Blue", imgThresholded); //show the thresholded image
+		imshow("Yellow", YellowimgThresholded); //show the thresholded image
+		imshow("Green", GreenimgThresholded); //show the thresholded image
+
 
 		if (waitKey(30) == 27) //wait for 'esc' key press for 30ms. If 'esc' key is pressed, break loop
 		{
